@@ -41,7 +41,7 @@ def ParseBookmark(bookmark):
     elem += 1
     token = TOKEN.parse(bookmark)
     bookmark = bookmark[TOKEN.sizeof():]
-  print u'\tPath: {}'.format(path)
+  print( u'\tPath: {}'.format(path))
 
   # INODE PATH
   # Element 1537
@@ -57,9 +57,9 @@ def ParseBookmark(bookmark):
       token = TOKEN.parse(bookmark)
       bookmark = bookmark[TOKEN.sizeof():]
     if inodes:
-      print u'\tInode Path: /{}'.format(u'/'.join(inodes))
+      print( u'\tInode Path: /{}'.format(u'/'.join(inodes)))
       if len(inodes) != elem:
-        print "\tWarning: the original path and the new path are different, check Sandbox Path."
+        print( "\tWarning: the original path and the new path are different, check Sandbox Path.")
     # Element 1537
     bookmark, value = getData(bookmark, token.length, token.type) 
     token = TOKEN.parse(bookmark)
@@ -80,7 +80,7 @@ def ParseBookmark(bookmark):
     token = TOKEN.parse(bookmark)
     bookmark = bookmark[TOKEN.sizeof():]
     bookmark, value = getData(bookmark, token.length, token.type)
-    print u'\tUser ID: {}'.format(value)
+    print( u'\tUser ID: {}'.format(value))
     token = TOKEN.parse(bookmark)
     bookmark = bookmark[TOKEN.sizeof():]
 
@@ -91,7 +91,7 @@ def ParseBookmark(bookmark):
     bookmark = bookmark[TOKEN.sizeof():]
     if token.type == 771:
       bookmark, value = getData(bookmark, token.length, token.type)
-      print u'\tUser ID: {}'.format(value[1:-1])
+      print( u'\tUser ID: {}'.format(value[1:-1]))
       token = TOKEN.parse(bookmark)
       bookmark = bookmark[TOKEN.sizeof():]
     elif(token.type == 1024):
@@ -105,14 +105,14 @@ def ParseBookmark(bookmark):
       # External montpoint
       if token.type == 257:
         bookmark, value = getData(bookmark, token.length, token.type)
-        print u'\tExternal device: {}'.format(value)
+        print( u'\tExternal device: {}'.format(value))
         token = TOKEN.parse(bookmark)
         bookmark = bookmark[TOKEN.sizeof():]
 
   # Hardisk Partition
   if token.type == 257:
     bookmark, value = getData(bookmark, token.length, token.type)
-    print u'\tHD Partition Root Name: {}'.format(value)
+    print( u'\tHD Partition Root Name: {}'.format(value))
     token = TOKEN.parse(bookmark)
     bookmark = bookmark[TOKEN.sizeof():] 
       
@@ -127,20 +127,20 @@ def ParseBookmark(bookmark):
     bookmark = bookmark[TOKEN.sizeof():]
     if token.type == 257:
       bookmark, value = getData(bookmark, token.length, token.type)
-      print u'\tHD Root UUID: {}'.format(value)
+      print( u'\tHD Root UUID: {}'.format(value))
       token = TOKEN.parse(bookmark)
       bookmark = bookmark[TOKEN.sizeof():]
        
   # 513
   if token.type == 513:
     bookmark, value = getData(bookmark, token.length, token.type)
-    # print u'\tUnknown {}: {}'.format(token.type, value)
+    # print( u'\tUnknown {}: {}'.format(token.type, value))
     token = TOKEN.parse(bookmark)
     bookmark = bookmark[TOKEN.sizeof():]
     # Mount disk
     if token.type == 257:
       bookmark, value = getData(bookmark, token.length, token.type)
-      print u'\tHD Root mount in: {}'.format(value)
+      print( u'\tHD Root mount in: {}'.format(value))
       token = TOKEN.parse(bookmark)
       bookmark = bookmark[TOKEN.sizeof():]
   
@@ -155,8 +155,8 @@ def ParseBookmark(bookmark):
       elements = value.split(';')
       sandbox_name = elements[0]
       sandbox_path = elements[len(elements)-1]
-      print u'\tSandbox ID: {}'.format(sandbox_name)
-      print u'\tSandbox Path: {}'.format(sandbox_path)
+      print( u'\tSandbox ID: {}'.format(sandbox_name))
+      print( u'\tSandbox Path: {}'.format(sandbox_path))
       token = TOKEN.parse(bookmark)
       bookmark = bookmark[TOKEN.sizeof():]
 
@@ -190,7 +190,7 @@ def getData(data, length, type):
     return (data, u'{}'.format(value))
 
 def DebugParseBookmark(bookmark):
-  print "-----------"
+  print( "-----------")
   header = HEADER.parse(bookmark)
   if 'book' != header.magic:
     return
@@ -206,7 +206,7 @@ def DebugParseBookmark(bookmark):
       for i in range(times):
         value += u'{}'.format(STR.parse(bookmark))
         bookmark = bookmark[4:]
-      print u'Text: {}'.format(value)
+      print( u'Text: {}'.format(value))
     else:
       value = []
       for i in range(times):
@@ -216,18 +216,18 @@ def DebugParseBookmark(bookmark):
         t = value.pop(0) + 978307200
         timestamp = time.strftime(
             '%Y-%m-%d %H:%M:%S', time.localtime(t))
-        print u'Timestamp: {}, extra: {}'.format(
-            timestamp, value)
+        print( u'Timestamp: {}, extra: {}'.format(
+            timestamp, value))
       else:
-        print u'Unknown type {}({}): {}'.format(
-            token.type, hex(token.type), value)
-  print "--------///-------"
+        print( u'Unknown type {}({}): {}'.format(
+            token.type, hex(token.type), value))
+  print( "--------///-------")
 
 name = sys.argv[1]
 fd = open(name, 'rb')
 plist = binplist.BinaryPlist(fd, False, False)
 
-print u'File: {}\n'.format(name)
+print( u'File: {}\n'.format(name))
 
 try:
   parsed_plist = plist.Parse()
@@ -249,11 +249,11 @@ if documents:
     info_program = name.split('.')
     company = info_program[1]
     program = info_program[2]
-    print u'\tRecent document open by {}({}): {}'.format(
-        program, company, doc['Name'])
+    print( u'\tRecent document open by {}({}): {}'.format(
+        program, company, doc['Name']))
     # TODO: Specific Binary Structure, it must be parsed.
     ParseBookmark(doc['Bookmark'])
-    print ''
+    print( '')
 
 try:
   documents = parsed_plist['RecentApplications']
@@ -262,8 +262,8 @@ except KeyError:
 if documents:
   for doc in documents['CustomListItems']:
     name = name.split('/').pop()
-    print u'Recent applications in {}: {}'.format(
-        name, doc['Name'])
+    print( u'Recent applications in {}: {}'.format(
+        name, doc['Name']))
     # TODO: Specific Binary Structure, it must be parsed.
     ParseBookmark(doc['Bookmark'])
 

@@ -76,7 +76,7 @@ def compare(text1, text2):
   i = 0
   while(i < len(text1) and i < len(text2)):
     if text1[i] != text2[i]:
-      print u'Difference in {}: "{}" "{}"'.format(i, text1[i], text2[i])
+      print( u'Difference in {}: "{}" "{}"'.format(i, text1[i], text2[i]))
       break
     i += 1
 
@@ -118,16 +118,16 @@ while(more):
   more = Pair(f)
 
 if document.crt_time:
-  print u'Creation time: {} ({}).'.format(
-      getTime(document.crt_time), document.crt_time)
+  print( u'Creation time: {} ({}).'.format(
+      getTime(document.crt_time), document.crt_time))
 if document.proc_time:
-  print u'Process time: {} ({}).'.format(
-      getTime(document.proc_time), document.proc_time)
+  print( u'Process time: {} ({}).'.format(
+      getTime(document.proc_time), document.proc_time))
 if document.comp_time:
-  print u'Completed time: {} ({}).'.format(
-      getTime(document.comp_time), document.comp_time)
-print u'\n'.join(document.data)
-print u'------------------------'
+  print( u'Completed time: {} ({}).'.format(
+      getTime(document.comp_time), document.comp_time))
+print( u'\n'.join(document.data))
+print( u'------------------------')
 
 f.close()
 

@@ -24,7 +24,7 @@ name = sys.argv[1]
 fd = open(name, 'rb')
 plist = binplist.BinaryPlist(fd, False, False)
 
-print u'File: {}'.format(name)
+print( u'File: {}'.format(name))
 
 try:
   parsed_plist = plist.Parse()
@@ -32,7 +32,7 @@ except binplist.FormatError, e:
   try:
     parsed_plist = plistlib.readPlist(name)
   except:
-    print "Not a valid plist file."
+    print( "Not a valid plist file.")
     exit(1)
 
 # Time Machine // com.apple.TimeMachine.plist
@@ -45,9 +45,9 @@ if destinations:
     uuid = destination['DestinationUUIDs']
     if not uuid:
       uuid = 'Unknown device'
-    print u'TimeMachine Device: {}'.format(uuid)
+    print( u'TimeMachine Device: {}'.format(uuid))
     for date in destination['SnapshotDates']:
-      print u'Backup at {}'.format(date)
+      print( u'Backup at {}'.format(date))
 
 # Bluetooth Device // com.apple.Bluetooth.plist
 try:
@@ -62,8 +62,8 @@ if devices:
     except KeyError:
       name = 'Unknown'
     timestamp = device['LastInquiryUpdate']
-    print u'Last bluetooth {}({}) connected at {}'.format(
-        name, mac_device, timestamp)
+    print( u'Last bluetooth {}({}) connected at {}'.format(
+        name, mac_device, timestamp))
 
 # Airport Wifi stored // com.apple.airport.preferences.plist
 try:
@@ -75,18 +75,18 @@ if wifis:
     timestamp = wifi['LastConnected']
     ssid = wifi['SSIDString']
     security = wifi['SecurityType']
-    print u'Last connection at {} in Wifi "{}" with security "{}"'.format(
-        timestamp, ssid, security)
+    print( u'Last connection at {} in Wifi "{}" with security "{}"'.format(
+        timestamp, ssid, security))
 
 # Mac OS X Updates // com.apple.SoftwareUpdate.plist
 try:
   updatefull = parsed_plist['LastFullSuccessfulDate']
-  print u'Full Mac OS X update at {}'.format(updatefull)
+  print( u'Full Mac OS X update at {}'.format(updatefull))
 except KeyError:
   pass
 try:
   update = parsed_plist['LastSuccessfulDate']
-  print u'Partial Mac OS X update at {}'.format(update)
+  print( u'Partial Mac OS X update at {}'.format(update))
 except KeyError:
   pass
 
@@ -102,8 +102,8 @@ if extensions:
     path = extension['PATH']
     name = extension['DISPLAY_NAME']
     last_used = extension['LAST_USED']
-    print u'Extension {} opened by {} ({}) was openned last time at {}'.format(
-         name_extension, name, path, last_used)
+    print( u'Extension {} opened by {} ({}) was openned last time at {}'.format(
+         name_extension, name, path, last_used))
 
 # /Users/user/Library/Preferences/ByHost/
 # Apple Accounts // com.apple.coreservices.appleidauthenticationinfo.*.plist
@@ -127,12 +127,12 @@ if accounts:
     lastTime = account['LastSuccessfulConnect']
     validateTime = account['ValidationDate']
     
-    print u'Apple account {} ({} {}) created at {}'.format(
-        name_account, name, family_name, creationTime)
-    print u'Apple account {} ({} {}) last time used at {}'.format(
-        name_account, name, family_name, lastTime)
-    print u'Apple account {} ({} {}) last validated at {}'.format(
-        name_account, name, family_name, validateTime)
+    print( u'Apple account {} ({} {}) created at {}'.format(
+        name_account, name, family_name, creationTime))
+    print( u'Apple account {} ({} {}) last time used at {}'.format(
+        name_account, name, family_name, lastTime))
+    print( u'Apple account {} ({} {}) last validated at {}'.format(
+        name_account, name, family_name, validateTime))
 
 ################ NO TIMESTIME ####################
 # /Users/moxilo/Library/Preferences
@@ -148,10 +148,10 @@ except KeyError:
 if documents:
   for doc in documents['CustomListItems']:
     name = name.split('/').pop().replace('.plist', '').replace('.LSSharedFileList', '')
-    print u'Recent document in {}: {}'.format(
-        name, doc['Name'])
+    print( u'Recent document in {}: {}'.format(
+        name, doc['Name']))
     # TODO: Specific Binary Structure, it must be parsed.
-    #print doc['Bookmark']
+    #print( doc['Bookmark'])
 
 try:
   documents = parsed_plist['RecentApplications']
@@ -160,8 +160,8 @@ except KeyError:
 if documents:
   for doc in documents['CustomListItems']:
     name = name.split('/').pop()
-    print u'Recent applications in {}: {}'.format(
-        name, doc['Name'])
+    print( u'Recent applications in {}: {}'.format(
+        name, doc['Name']))
     # TODO: Specific Binary Structure, it must be parsed.
-    #print doc['Bookmark']
+    #print( doc['Bookmark'])
 

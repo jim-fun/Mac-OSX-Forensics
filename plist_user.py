@@ -92,29 +92,29 @@ for dic in xml_policy.iterfind('dict'):
     elif elem.tag == u'date':
       list_timestamp.append([key, elem.text])
 
-print u'\nUser: {}'.format(account)
-print u'UID: {}'.format(uid)
-print u'GID: {}'.format(gid)
-print u'Shell: {}'.format(shell)
-print u'Policy:'.format()
+print( u'\nUser: {}'.format(account))
+print( u'UID: {}'.format(uid))
+print( u'GID: {}'.format(gid))
+print( u'Shell: {}'.format(shell))
+print( u'Policy:'.format())
 for time_elem in list_timestamp:
-    print u'  {} at {}.'.format(time_elem[0], time_elem[1])
-print u'Available Passwords:'.format()
+    print( u'  {} at {}.'.format(time_elem[0], time_elem[1]))
+print( u'Available Passwords:'.format())
 for password in parsed_plist['authentication_authority']:
   if password.startswith(';ShadowHash'):
-    print u' Mac OS X user password:'
-    print u'  Iterations: {}'.format(iterations)
-    print u'  Salt: {}'.format(salt)
-    print u'  Entropy: {}'.format(entropy)
+    print( u' Mac OS X user password:')
+    print( u'  Iterations: {}'.format(iterations))
+    print( u'  Salt: {}'.format(salt))
+    print( u'  Entropy: {}'.format(entropy))
   elif password.startswith(';Kerberos'):
     listKerberos = password.split(';')
-    print u' Kerberos:'
-    print u'  Version: {}'.format(listKerberos[1])
-    print u'  Hash: {}'.format(listKerberos[4])
+    print( u' Kerberos:')
+    print( u'  Version: {}'.format(listKerberos[1]))
+    print( u'  Hash: {}'.format(listKerberos[4]))
   else:
-    print u' {}'.format(password)
-print u''.format()
-print u''.format()
+    print( u' {}'.format(password))
+print( u''.format())
+print( u''.format())
 
 # from pbkdf2 import crypt
 # password = 'abcd'

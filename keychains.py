@@ -121,83 +121,83 @@ db_header = KEYCHAIN_DB_HEADER.parse_stream(f)
 if (db_header.minor_version != KEYCHAIN_MINOR_VERSION or
     db_header.major_version != KEYCHAIN_MAJOR_VERSION or
     db_header.magic != KEYCHAIN_MAGIC_HEADER):
-    print u'It is not a valid Keychain file'
+    print( u'It is not a valid Keychain file')
     exit(1)
       
 # From the schema we get the number of tables and where these tables are.      
 db_schema = KEYCHAIN_DB_SCHEMA.parse_stream(f)
 table_offsets = []
-print u'Number of tables: {}.'.format(db_schema.number_of_tables)
+print( u'Number of tables: {}.'.format(db_schema.number_of_tables))
 for i in range(db_schema.number_of_tables):
   table_offsets.append(TABLE_OFFSET.parse_stream(f) + KEYCHAIN_DB_HEADER.sizeof())
 
 
 for table_offset in table_offsets:
-  print u'Table at {0}(0x{0:x})'.format(table_offset)
+  print( u'Table at {0}(0x{0:x})'.format(table_offset))
   f.seek(table_offset)
   table = TABLE_HEADER.parse_stream(f)
   
   '''
   # Application
   if table.record_type == 2147483648: 
-    print u'\tRecord type: {}'.format(TABLE_RECORD_TYPE[table.record_type])
-    print u'\tSize: {}'.format(table.table_size)
-    print u'\tNumber of records: {}'.format(table.number_of_records)
-    print u'\tNumber of records count: {}'.format(table.recordnumbercount)
-    print u'\tFirst record: {0}(0x{0:x}) = {1}'.format(
-        table.first_record, table_offset + table.first_record)
-    print u'\tFirst record index: {0}(0x{0:x}) = {1}'.format(
-        table.index_offset, table_offset + table.index_offset)
+    print( u'\tRecord type: {}'.format(TABLE_RECORD_TYPE[table.record_type]))
+    print( u'\tSize: {}'.format(table.table_size))
+    print( u'\tNumber of records: {}'.format(table.number_of_records))
+    print( u'\tNumber of records count: {}'.format(table.recordnumbercount))
+    print( u'\tFirst record: {0}(0x{0:x}) = {1}'.format(
+        table.first_record, table_offset + table.first_record))
+    print( u'\tFirst record index: {0}(0x{0:x}) = {1}'.format(
+        table.index_offset, table_offset + table.index_offset))
   '''      
   
   if table.record_type == 2147483648 or table.record_type == 2147483649: 
-    print u'\tRecord type: {}'.format(TABLE_RECORD_TYPE[table.record_type])
-    print u'\tSize: {}'.format(table.table_size)
-    print u'\tNumber of records: {}'.format(table.number_of_records)
-    print u'\tNumber of records count: {}'.format(table.recordnumbercount)
-    print u'\tFirst record: {0}(0x{0:x}) = {1}'.format(
-        table.first_record, table_offset + table.first_record)
-    print u'\tFirst record index: {0}(0x{0:x}) = {1}'.format(
-        table.index_offset, table_offset + table.index_offset)
+    print( u'\tRecord type: {}'.format(TABLE_RECORD_TYPE[table.record_type]))
+    print( u'\tSize: {}'.format(table.table_size))
+    print( u'\tNumber of records: {}'.format(table.number_of_records))
+    print( u'\tNumber of records count: {}'.format(table.recordnumbercount))
+    print( u'\tFirst record: {0}(0x{0:x}) = {1}'.format(
+        table.first_record, table_offset + table.first_record))
+    print( u'\tFirst record index: {0}(0x{0:x}) = {1}'.format(
+        table.index_offset, table_offset + table.index_offset))
         
     f.seek(table_offset + table.first_record)
     for i in range(table.number_of_records):
       offset = f.tell()
-      print u'\t\tRecord at: {0}(0x{0:x})'.format(offset)
+      print( u'\t\tRecord at: {0}(0x{0:x})'.format(offset))
       record = RECORD_HEADER.parse_stream(f)
       
       # Timestamps
       jump = record.creation_time - RECORD_HEADER.sizeof() - 1 
       f.seek(jump, os.SEEK_CUR)
       creation_time = TIME.parse_stream(f)
-      print u'\t\tCreation time: {}-{}-{} {}:{}:{}'.format(
+      print( u'\t\tCreation time: {}-{}-{} {}:{}:{}'.format(
           creation_time.year, creation_time.month, creation_time.day, 
-          creation_time.hour, creation_time.minute, creation_time.second)
+          creation_time.hour, creation_time.minute, creation_time.second))
           
       jump = record.last_mod_time - (f.tell() - offset) - 1  
       last_mod_time = TIME.parse_stream(f)
-      print u'\t\tLast Modification time: {}-{}-{} {}:{}:{}'.format(
+      print( u'\t\tLast Modification time: {}-{}-{} {}:{}:{}'.format(
           last_mod_time.year, last_mod_time.month, last_mod_time.day, 
-          last_mod_time.hour, last_mod_time.minute, last_mod_time.second)
+          last_mod_time.hour, last_mod_time.minute, last_mod_time.second))
           
       # Description name
       if record.text_description:    
         jump = record.text_description - (f.tell() - offset) - 1    
         f.seek(jump, os.SEEK_CUR) 
         text_description = TEXT.parse_stream(f)
-        print u'\t\tDescription: {}'.format(text_description)
+        print( u'\t\tDescription: {}'.format(text_description))
                 
       # Name    
       jump = record.entry_name - (f.tell() - offset) - 1    
       f.seek(jump, os.SEEK_CUR) 
       entry_name = TEXT.parse_stream(f)
-      print u'\t\tName: {}'.format(entry_name)
+      print( u'\t\tName: {}'.format(entry_name))
       
       # Account
       jump = record.account_name - (f.tell() - offset) - 1 
       f.seek(jump, os.SEEK_CUR)   
       account_name = TEXT.parse_stream(f)
-      print u'\t\tAccount: {}'.format(account_name)
+      print( u'\t\tAccount: {}'.format(account_name))
       
       # Where
       if record.where:
@@ -213,10 +213,10 @@ for table_offset in table_offsets:
         jump = record.url - (f.tell() - offset) - 1 
         f.seek(jump, os.SEEK_CUR)   
         url = TEXT.parse_stream(f)
-        print u'\t\tWhere: {}{} ({}, {})'.format(where, url, protocol, type)
+        print( u'\t\tWhere: {}{} ({}, {})'.format(where, url, protocol, type))
           
       f.seek(record.entry_length + offset)
-      print "\t\t------------------------"
+      print( "\t\t------------------------")
   
   
   

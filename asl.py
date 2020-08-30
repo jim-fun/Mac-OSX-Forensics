@@ -94,11 +94,11 @@ ASL_RECORD_DYN_VALUE = construct.Struct(
 
 # Print the header of the file
 def printHeader(header): 
-  print "\nASL Header:"
-  print " Version: " + str(header.version)
-  print " Timestamp: " + str(header.timestamp)
-  print " FirstRecord: " + hex(header.offset)
-  print " LastRecord: " + hex(header.last_offset) + "\n"
+  print( "\nASL Header:")
+  print( " Version: " + str(header.version))
+  print( " Timestamp: " + str(header.timestamp))
+  print( " FirstRecord: " + hex(header.offset))
+  print( " LastRecord: " + hex(header.last_offset) + "\n")
 
 # Print a record value
 #
@@ -109,54 +109,54 @@ def printHeader(header):
 def printRecord(record_header, values, pos):
   # Static part of the entry
   human_time = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(record_header.timestamp))
-  print '\t Record in: {}'.format(hex(pos))
-  print '\t * Next record in: {}'.format(hex(record_header.next_offset))
-  print '\t * ASLMessageID: {}'.format(record_header.ASLMessageID)
-  print '\t * Timestamp: {0} ({1})'.format(human_time, record_header.timestamp)
-  print '\t * Level: {0} ({1}), PID: {2}'.format(ASL_MESSAGE_PRIORITY[record_header.level],
-      record_header.level, record_header.pid)
+  print( '\t Record in: {}'.format(hex(pos)))
+  print( '\t * Next record in: {}'.format(hex(record_header.next_offset)))
+  print( '\t * ASLMessageID: {}'.format(record_header.ASLMessageID))
+  print( '\t * Timestamp: {0} ({1})'.format(human_time, record_header.timestamp))
+  print( '\t * Level: {0} ({1}), PID: {2}'.format(ASL_MESSAGE_PRIORITY[record_header.level],
+      record_header.level, record_header.pid))
   fieldsID = ['UID: {}'.format(record_header.uid), 'GID: {}'.format(record_header.gid)]
   # If it is a valid read u/gid:
   if record_header.read_uid != int('ffffffff', 16):
     fieldsID.append('Read_UID: {}'.format(record_header.read_uid))
   if record_header.read_gid != int('ffffffff', 16):
     fieldsID.append('Read_GID: {}'.format(record_header.read_gid))
-  print '\t * {}'.format(', '.join(fieldsID))
+  print( '\t * {}'.format(', '.join(fieldsID)))
 
   # Dynamic part of the entry.
   # Host, Sender, Facility, Message, Name_Field1, Field1, Name_Field2, Field2, ...
-  print '\t * Host: {0}'.format(values[0].partition('\x00')[0])
-  print '\t * Sender: {0}'.format(values[1].partition('\x00')[0])
-  print '\t * Facility: {0}'.format(values[2].partition('\x00')[0])
-  print '\t * Message: {0}'.format(values[3].partition('\x00')[0])
+  print( '\t * Host: {0}'.format(values[0].partition('\x00')[0]))
+  print( '\t * Sender: {0}'.format(values[1].partition('\x00')[0]))
+  print( '\t * Facility: {0}'.format(values[2].partition('\x00')[0]))
+  print( '\t * Message: {0}'.format(values[3].partition('\x00')[0]))
   cont = 4
   while cont < (len(values) - 1):
-      print '\t * {0}: {1}'.format(values[cont].partition('\x00')[0],
-          values[cont+1].partition('\x00')[0])
+      print( '\t * {0}: {1}'.format(values[cont].partition('\x00')[0],
+          values[cont+1].partition('\x00')[0]))
       cont += 2
-  print '\t------------------------------------------------------'
+  print( '\t------------------------------------------------------')
 
 # Main program
 def __init__():
   if len(sys.argv) != 2:
-    print 'Use: python {0} ASLfile'.format(sys.argv[0])
+    print( 'Use: python {0} ASLfile'.format(sys.argv[0]))
     exit(1)
   log = sys.argv[1]
   try:
     f = open(log, 'rb')
   except:
-    print '[Error] The file ASL does not exist'
+    print( '[Error] The file ASL does not exist')
     exit(1)
 
-  print '\nParsing the ASL file [{}].'.format(log)
+  print( '\nParsing the ASL file [{}].'.format(log))
 
   try: 
     header = ASL_HEADER_STRUCT.parse_stream(f)
   except:
-    print "[Error]It is not a ASL file, ASL Header not valid."
+    print( "[Error]It is not a ASL file, ASL Header not valid.")
     exit(1)
   if header.magic != ASL_MAGIC:
-    print "[Error]It is not a ASL file, ASL_MAGIC invalid."
+    print( "[Error]It is not a ASL file, ASL_MAGIC invalid.")
     exit(1)
     
   printHeader(header)

@@ -13,9 +13,9 @@ s_alias = construct.Struct(
     construct.Padding(4),
     construct.UBInt16('length'),
     construct.Padding(6),
-    construct.UBInt32('timestamp1'),
+    construct.UBInt16('timestamp1'),
     construct.Padding(18),
-    construct.UBInt32('timestamp2'),
+    construct.UBInt16('timestamp2'),
     construct.Padding(20))
 
 s_type = construct.UBInt16('type')
@@ -44,7 +44,7 @@ def __init__():
   try:
     parsed_plist = plist.Parse()
   except binplist.FormatError:
-    print "Error!"
+    print("Error!")
     exit()
   '''
   system_items = parsed_plist['systemitems']
@@ -68,23 +68,23 @@ def __init__():
           type = s_type.parse(data)
           data = data[s_type.sizeof():]
       except:
-        print "Fail!"
+        print( "Fail!")
         continue
 
       # If not volume ID
       if data == '':
-        print "Fail!"
+        print("Fail!")
         continue
       v = s_volume.parse(data)
       time = datetime.datetime.fromtimestamp(
           s.timestamp1 - HFS_to_Epoch).strftime('%Y-%m-%d %H:%M:%S')
-      print u'\n\tFile name: {}'.format(v.volume1)
-      print u'\tVolume name: {}'.format(v.volume2)
-      print u'\tTime: {}'.format(time)
+      print(u'\n\tFile name: {}'.format(v.volume1))
+      print( u'\tVolume name: {}'.format(v.volume2))
+      print( u'\tTime: {}'.format(time))
       if s.timestamp1 != s.timestamp2:
         time = datetime.datetime.fromtimestamp(
             s.timestamp2 - HFS_to_Epoch).strftime('%Y-%m-%d %H:%M:%S')
-        print u'\tSecond time: {}'.format(time)
+        print( u'\tSecond time: {}'.format(time))
       
       type = s_type.parse(data)
       data = data[s_type.sizeof():]
@@ -94,5 +94,5 @@ def __init__():
       if data == '':
         continue
       mount_point = s_mount_point.parse(data)
-      print u'\tMount point: {}'.format(mount_point)
+      print( u'\tMount point: {}'.format(mount_point))
 __init__()

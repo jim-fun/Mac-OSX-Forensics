@@ -1383,7 +1383,7 @@ def ReadBSMEvent(f, token_id, event_number):
   elif bsm_type == 'BSM_HEADER32_EX':
     token = structure.parse_stream(f)
   else:
-    print "[Error] At 0x{:X} header unknown.".format(f.tell())
+    print( "[Error] At 0x{:X} header unknown.".format(f.tell()))
     exit(1)
 
   data = []
@@ -1401,18 +1401,18 @@ def ReadBSMEvent(f, token_id, event_number):
     try:
       token_id = BSM_TYPE.parse_stream(f)
     except (IOError, construct.FieldError):
-      print (
+      print(
           u'Unable to parse the Token ID at '
           u'position "{}"'.format(f.tell()))
       return
     # Unknown token id
     if not token_id in BSM_TYPE_LIST:
       f.seek(next_entry - f.tell(), os.SEEK_CUR)
-      print '\t[Unfinished] Event: {}.\n\tType: {}.\n\tTimestamp: {}.'.format(
-          event_number, event_type, human_timestamp)
+      print( '\t[Unfinished] Event: {}.\n\tType: {}.\n\tTimestamp: {}.'.format(
+          event_number, event_type, human_timestamp))
       for i in range(len(data)):
-        print u'\t{}'.format(data[i])
-      print ''
+        print( u'\t{}'.format(data[i]))
+      print( '')
       return
     else:
       token = BSM_TYPE_LIST[token_id][1].parse_stream(f)
@@ -1425,11 +1425,11 @@ def ReadBSMEvent(f, token_id, event_number):
               token_id, f.tell()))
       f.seek(next_entry - f.tell(), os.SEEK_CUR)
       return
-  print '\tEvent: {}.\n\tType: {}.\n\tTimestamp: {}.'.format(
-      event_number, event_type, human_timestamp)
+  print( '\tEvent: {}.\n\tType: {}.\n\tTimestamp: {}.'.format(
+      event_number, event_type, human_timestamp))
   for i in range(len(data)):
-    print u'\t{}'.format(data[i])
-  print ''
+    print( u'\t{}'.format(data[i]))
+  print( '')
 
 # Check if the file is a BSM file.
 #
@@ -1440,15 +1440,15 @@ def VerifyFile(f):
   if (BSM_TYPE_LIST[type][0] != 'BSM_HEADER32' and
       BSM_TYPE_LIST[type][0] != 'BSM_HEADER64' and
       BSM_TYPE_LIST[type][0] != 'BSM_HEADER32_ex'):
-    print '[Error] It is not a BSM file, unknown header token_id.'
+    print( '[Error] It is not a BSM file, unknown header token_id.')
     exit(1) 
   try: 
     header = BSM_HEADER.parse_stream(f)
   except:
-    print '[Error] It is not a BSM file, not a header structure.'
+    print( '[Error] It is not a BSM file, not a header structure.')
     exit(1)
   if header.version != AUDIT_HEADER_VERSION:
-    print '[WARNING] BSM version {} not supported.'.format(header.version)
+    print( '[WARNING] BSM version {} not supported.'.format(header.version))
   f.close()
   
   
@@ -1456,22 +1456,22 @@ def VerifyFile(f):
 # Main function.
 def __init__():
   if len(sys.argv) != 2:
-    print 'Use: python {0} BSMfile'.format(sys.argv[0])
+    print( 'Use: python {0} BSMfile'.format(sys.argv[0]))
     exit(1)
   log = sys.argv[1]
   try:
     f = open(log, 'rb')
   except:
-    print '[Error] The file BSM does not exist'
+    print( '[Error] The file BSM does not exist')
     exit(1)
     
   VerifyFile(f)
-  print '\nParsing BSM file [{}].\n'.format(log)
+  print( '\nParsing BSM file [{}].\n'.format(log))
 
   try:
     f = open(log, 'rb')
   except:
-    print '[Error] The file BSM does not exist'
+    print( '[Error] The file BSM does not exist')
     exit(1)
   event_number = 0
   token_id = BSM_TYPE.parse_stream(f)

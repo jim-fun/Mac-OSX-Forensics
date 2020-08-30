@@ -69,15 +69,15 @@ def getAction(agent, action, msg):
   return None
 
 def printData(timestamp, epoch, agent, action, message):
-  print '[{}] ({}) Agent: {} Action: {} [{}]'.format(timestamp, epoch, agent, action, message)
+  print( '[{}] ({}) Agent: {} Action: {} [{}]'.format(timestamp, epoch, agent, action, message))
 
 def __init__():
   #TODO: Common problem in syslog format logs. In PLASO version is much more better :-).
   year = time.strftime("%Y", time.gmtime())
-  print '\n\n\t[IMPORTANT] The year {} is selected as a year of the timestamp!!!!\n\n'.format(year)
+  print( '\n\n\t[IMPORTANT] The year {} is selected as a year of the timestamp!!!!\n\n'.format(year))
   
   if len(sys.argv) > 2:
-      print 'Use: python {0} wififile'.format(sys.argv[0])
+      print( 'Use: python {0} wififile'.format(sys.argv[0]))
       exit(1)
 
   try:
@@ -87,7 +87,7 @@ def __init__():
         path = sys.argv[1]
       f = open(path, 'r')
   except:
-      print u'[Error] File [{}] not found.'.format(path)
+      print( u'[Error] File [{}] not found.'.format(path))
       exit(1)
 
   Day_Name = r'(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s?'
